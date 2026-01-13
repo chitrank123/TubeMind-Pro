@@ -8,7 +8,9 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
-      # sync: false means "Don't look in this file, ask the user in the dashboard"
+      - key: ALGORITHM
+        value: HS256
+      # These "sync: false" lines mean Render will show you a BOX to paste the values
       - key: DATABASE_URL
         sync: false
       - key: GROQ_API_KEY
@@ -16,7 +18,7 @@ services:
       - key: REDIS_URL
         sync: false
       - key: SECRET_KEY
-        generateValue: true  # Render will auto-generate a secure random key for you
+        generateValue: true
 
   # --- 2. THE FRONTEND ---
   - type: web
