@@ -1,0 +1,22 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+.aienv/
+venv/
+env/
+.env
+
+# --- JavaScript / React ---
+ui/node_modules/
+ui/dist/
+ui/.env
+ui/.DS_Store
+
+# --- IDE Settings ---
+.vscode/
+.idea/
+
+# --- Database ---
+*.sqlite3
+*.db
