@@ -1,0 +1,23 @@
+services:
+  # --- 1. THE BACKEND ---
+  - type: web
+    name: tubemind-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      # Simply import the entire group here. 
+      # Render will auto-inject DATABASE_URL, GROQ_API_KEY, REDIS_URL from the dashboard.
+      - fromGroup: shared-secrets
+
+  # --- 2. THE FRONTEND ---
+  - type: web
+    env: static
+    name: tubemind-frontend
+    buildCommand: cd ui && npm install && npm run build
+    staticPublishPath: ./ui/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://tubemind-backend.onrender.com

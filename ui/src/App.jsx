@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 // --- ICONS (Simple SVGs to avoid extra dependencies) ---
 const MenuIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
 const XIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 18 18"/></svg>
@@ -58,7 +58,7 @@ export default function App() {
   const handleAuth = async () => {
     // NOTE: Using IP provided in previous context
     const endpoint = authMode === 'login' ? '/auth/login' : '/auth/register'
-    const res = await fetch(`http://210.89.34.6:8001${endpoint}`, {
+    const res = await fetch(`${API_BASE}${endpoint}`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(authInput)
@@ -77,7 +77,7 @@ export default function App() {
 
   // 2. SESSION ACTIONS
   const loadSessions = async (username) => {
-    const res = await fetch(`http://210.89.34.6:8001/api/sessions/${username}`)
+    const res = await fetch(`${API_BASE}/api/sessions/${username}`)
     const data = await res.json()
     setSessions(data)
   }
@@ -88,7 +88,7 @@ export default function App() {
     if (!id) return alert("Invalid URL")
 
     setIsThinking(true)
-    const processRes = await fetch('http://210.89.34.6:8001/api/process', {
+    const processRes = await fetch('${API_BASE}/api/process', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url })
     })
@@ -96,7 +96,7 @@ export default function App() {
     setIsThinking(false)
     setRecs(pData.recommendations)
 
-    const res = await fetch('http://210.89.34.6:8001/api/session/create', {
+    const res = await fetch('${API_BASE}/api/session/create', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ video_id: id, title: pData.recommendations.topic || "New Chat", username: user.username })
     })
@@ -119,12 +119,12 @@ export default function App() {
     const videoUrl = `https://www.youtube.com/watch?v=${session.video_id}`
     setUrl(videoUrl)
     
-    const historyRes = await fetch(`http://210.89.34.6:8001/api/history/${session.id}`)
+    const historyRes = await fetch(`${API_BASE}/api/history/${session.id}`)
     const historyData = await historyRes.json()
     setMessages(historyData)
     
     try {
-      const res = await fetch('http://210.89.34.6:8001/api/process', {
+      const res = await fetch('${API_BASE}/api/process', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: videoUrl })
       })
