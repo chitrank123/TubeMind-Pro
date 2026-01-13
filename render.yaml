@@ -8,9 +8,15 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
-      # Simply import the entire group here. 
-      # Render will auto-inject DATABASE_URL, GROQ_API_KEY, REDIS_URL from the dashboard.
-      - fromGroup: shared-secrets
+      # sync: false means "Don't look in this file, ask the user in the dashboard"
+      - key: DATABASE_URL
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true  # Render will auto-generate a secure random key for you
 
   # --- 2. THE FRONTEND ---
   - type: web
