@@ -1,0 +1,63 @@
+# Version Control
+.git
+.gitignore
+.github
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+*.code-workspace
+
+# UI
+ui/
+node_modules/
+dist/
+build/
+
+# Environment
+.env.local
+.env.*.local
+
+# Database files (optional - remove if you want to persist)
+analytics.db
+tubemind_sessions.db
+tubemind_users.db
+
+# Documentation
+README.md
+TubemindAiAdvancements.txt
+
+# Test files
+test_yt.py
+reset_db.py
+
+# Configuration
+render.yaml
+
+# Misc
+.aienv/

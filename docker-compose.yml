@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # Main TubeMind API Service
+  tubemind-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tubemind-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      # Add your environment variables here
+      # - GROQ_API_KEY=${GROQ_API_KEY}
+      # - SECRET_KEY=${SECRET_KEY}
+      # - ALGORITHM=${ALGORITHM}
+    env_file:
+      - .env.local  # Optional local override
+    volumes:
+      # Persist ChromaDB data
+      - chroma_db_advanced:/app/chroma_db_advanced
+      - chroma_db_agents:/app/chroma_db_agents
+      - chroma_db_citations:/app/chroma_db_citations
+      - chroma_db_citations_v2:/app/chroma_db_citations_v2
+      - chroma_db_pro:/app/chroma_db_pro
+      - chroma_db_resources:/app/chroma_db_resources
+      - chroma_db_resources_v2:/app/chroma_db_resources_v2
+      - chroma_db_sessions:/app/chroma_db_sessions
+      - chroma_db_ultimate:/app/chroma_db_ultimate
+      # Persist database files
+      - ./analytics.db:/app/analytics.db
+      - ./tubemind_sessions.db:/app/tubemind_sessions.db
+      - ./tubemind_users.db:/app/tubemind_users.db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - tubemind-network
+
+  # Optional: PostgreSQL for production (uncomment if needed)
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: tubemind-db
+  #   environment:
+  #     POSTGRES_DB: tubemind
+  #     POSTGRES_USER: tubemind_user
+  #     POSTGRES_PASSWORD: your_secure_password
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   restart: unless-stopped
+  #   networks:
+  #     - tubemind-network
+
+  # Optional: Redis for caching (uncomment if needed)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: tubemind-redis
+  #   ports:
+  #     - "6379:6379"
+  #   restart: unless-stopped
+  #   networks:
+  #     - tubemind-network
+
+volumes:
+  chroma_db_advanced:
+  chroma_db_agents:
+  chroma_db_citations:
+  chroma_db_citations_v2:
+  chroma_db_pro:
+  chroma_db_resources:
+  chroma_db_resources_v2:
+  chroma_db_sessions:
+  chroma_db_ultimate:
+  # postgres_data:
+
+networks:
+  tubemind-network:
+    driver: bridge
